@@ -103,6 +103,173 @@ export type Database = {
         }
         Relationships: []
       }
+      market_sentiment: {
+        Row: {
+          active_industries: string[] | null
+          bearish_sectors: string[] | null
+          bullish_sectors: string[] | null
+          created_at: string
+          date: string
+          fear_greed_score: number | null
+          id: string
+          market_mood: string | null
+          updated_at: string
+          vix: number | null
+        }
+        Insert: {
+          active_industries?: string[] | null
+          bearish_sectors?: string[] | null
+          bullish_sectors?: string[] | null
+          created_at?: string
+          date?: string
+          fear_greed_score?: number | null
+          id?: string
+          market_mood?: string | null
+          updated_at?: string
+          vix?: number | null
+        }
+        Update: {
+          active_industries?: string[] | null
+          bearish_sectors?: string[] | null
+          bullish_sectors?: string[] | null
+          created_at?: string
+          date?: string
+          fear_greed_score?: number | null
+          id?: string
+          market_mood?: string | null
+          updated_at?: string
+          vix?: number | null
+        }
+        Relationships: []
+      }
+      stocks: {
+        Row: {
+          ai_tag: string | null
+          avg_volume: number | null
+          created_at: string
+          debt_to_equity: number | null
+          eps: number | null
+          id: string
+          industry_id: string | null
+          is_trending: boolean | null
+          market_cap: number | null
+          name: string
+          pe: number | null
+          price: number | null
+          price_change: number | null
+          profit_yoy: number | null
+          revenue: number | null
+          revenue_yoy: number | null
+          roce: number | null
+          roe: number | null
+          rsi: number | null
+          sentiment: number | null
+          ticker: string
+          updated_at: string
+          volatility: number | null
+          volume: number | null
+        }
+        Insert: {
+          ai_tag?: string | null
+          avg_volume?: number | null
+          created_at?: string
+          debt_to_equity?: number | null
+          eps?: number | null
+          id?: string
+          industry_id?: string | null
+          is_trending?: boolean | null
+          market_cap?: number | null
+          name: string
+          pe?: number | null
+          price?: number | null
+          price_change?: number | null
+          profit_yoy?: number | null
+          revenue?: number | null
+          revenue_yoy?: number | null
+          roce?: number | null
+          roe?: number | null
+          rsi?: number | null
+          sentiment?: number | null
+          ticker: string
+          updated_at?: string
+          volatility?: number | null
+          volume?: number | null
+        }
+        Update: {
+          ai_tag?: string | null
+          avg_volume?: number | null
+          created_at?: string
+          debt_to_equity?: number | null
+          eps?: number | null
+          id?: string
+          industry_id?: string | null
+          is_trending?: boolean | null
+          market_cap?: number | null
+          name?: string
+          pe?: number | null
+          price?: number | null
+          price_change?: number | null
+          profit_yoy?: number | null
+          revenue?: number | null
+          revenue_yoy?: number | null
+          roce?: number | null
+          roe?: number | null
+          rsi?: number | null
+          sentiment?: number | null
+          ticker?: string
+          updated_at?: string
+          volatility?: number | null
+          volume?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stocks_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "industries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      themes: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          name: string
+          performance: number | null
+          slug: string
+          stock_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description: string
+          icon?: string
+          id?: string
+          name: string
+          performance?: number | null
+          slug: string
+          stock_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          performance?: number | null
+          slug?: string
+          stock_count?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
