@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { SearchBar } from '@/components/SearchBar';
 import { FilterTabs } from '@/components/FilterTabs';
 import { IndustryCard } from '@/components/IndustryCard';
+import { TrendingStocks } from '@/components/TrendingStocks';
 import { useIndustries } from '@/hooks/useIndustries';
 import type { FilterType } from '@/types/industry';
 import { Loader2, TrendingUp, Building2, Eye } from 'lucide-react';
@@ -23,7 +24,7 @@ export default function Index() {
   }, [industries]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-grid-pattern">
       <Header />
 
       <main className="container py-8">
@@ -61,6 +62,9 @@ export default function Index() {
             <span className="stat-value">{stats.totalViews.toLocaleString()}</span>
           </div>
         </div>
+
+        {/* Trending Stocks Section */}
+        <TrendingStocks />
 
         {/* Search & Filters */}
         <div className="space-y-4 mb-8">

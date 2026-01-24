@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Brain, LayoutGrid, MessageSquare, TrendingUp } from 'lucide-react';
+import { Brain, LayoutGrid, MessageSquare, TrendingUp, BarChart3, Scan, Activity, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Header() {
@@ -7,7 +7,11 @@ export function Header() {
 
   const navItems = [
     { href: '/', label: 'Discovery', icon: LayoutGrid },
-    { href: '/chat', label: 'AI Chat', icon: MessageSquare },
+    { href: '/analyze', label: 'Analyzer', icon: BarChart3 },
+    { href: '/predict', label: 'Predictor', icon: TrendingUp },
+    { href: '/scanner', label: 'Scanner', icon: Scan },
+    { href: '/sentiment', label: 'Sentiment', icon: Activity },
+    { href: '/themes', label: 'Themes', icon: Sparkles },
   ];
 
   return (
@@ -24,7 +28,7 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.href;
             const Icon = item.icon;
@@ -34,7 +38,7 @@ export function Header() {
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                  'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
@@ -47,12 +51,10 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-            <TrendingUp className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-medium text-primary">Live</span>
-          </div>
-        </div>
+        <Link to="/chat" className="btn-ai-glow flex items-center gap-2">
+          <MessageSquare className="h-4 w-4" />
+          <span className="hidden sm:inline">Ask AI</span>
+        </Link>
       </div>
     </header>
   );
