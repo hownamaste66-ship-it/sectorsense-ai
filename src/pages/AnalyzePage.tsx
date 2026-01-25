@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { SearchBar } from '@/components/SearchBar';
+import { StockSearchInput } from '@/components/StockSearchInput';
 import { StockMetricCard } from '@/components/StockMetricCard';
 import { RatingMeter } from '@/components/RatingMeter';
 import { SparklineChart } from '@/components/SparklineChart';
-import { useStock } from '@/hooks/useStocks';
+import { RealTimeIndicator } from '@/components/RealTimeIndicator';
+import { MarketInsightsBanner } from '@/components/MarketInsightsBanner';
+import { useRealtimeStock } from '@/hooks/useRealtimeStocks';
 import { formatMarketCap, formatPercentage } from '@/lib/formatters';
 import { 
-  Search, Loader2, TrendingUp, TrendingDown, DollarSign, 
-  BarChart3, Percent, Building2, Activity, Shield,
+  Loader2, TrendingUp, TrendingDown, DollarSign, 
+  BarChart3, Percent, Activity, Shield,
   Brain, ChartLine, Target, Gauge
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 // Mock price data for chart
@@ -25,17 +26,28 @@ export default function AnalyzePage() {
   const [searchValue, setSearchValue] = useState(tickerParam);
   const [activeTicker, setActiveTicker] = useState(tickerParam);
 
-  const { data: stock, isLoading, error } = useStock(activeTicker);
+  const { stock, isLoading, lastUpdate } = useRealtimeStock(activeTicker);
 
-  const handleSearch = () => {
-    if (searchValue.trim()) {
-      setActiveTicker(searchValue.trim().toUpperCase());
-      setSearchParams({ ticker: searchValue.trim().toUpperCase() });
+  // Sync URL ticker with state
+  useEffect(() => {
+    const urlTicker = searchParams.get('ticker') || '';
+    if (urlTicker !== activeTicker) {
+      setActiveTicker(urlTicker);
+      setSearchValue(urlTicker);
     }
+  }, [searchParams]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+  };
+
+  const handleStockSelect = (selectedStock: { ticker: string }) => {
+    setActiveTicker(selectedStock.ticker);
+    setSearchParams({ ticker: selectedStock.ticker });
   };
 
   const priceData = generateMockPriceData();
-  const isPositive = stock && stock.price_change >= 0;
+  const isPositive = stock && (stock.price_change || 0) >= 0;
 
   // Calculate AI ratings based on stock metrics
   const getValuationRating = () => {
@@ -52,7 +64,7 @@ export default function AnalyzePage() {
 
   const getRiskRating = () => {
     if (!stock) return 50;
-    return Math.round((1 - stock.volatility) * 100);
+    return Math.round((1 - (stock.volatility || 0.5)) * 100);
   };
 
   return (
@@ -60,6 +72,9 @@ export default function AnalyzePage() {
       <Header />
 
       <main className="container py-8">
+        {/* Market Insights Banner */}
+        <MarketInsightsBanner />
+
         {/* Hero Section */}
         <div className="text-center mb-8 slide-up">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">
@@ -72,22 +87,13 @@ export default function AnalyzePage() {
 
         {/* Search */}
         <div className="max-w-xl mx-auto mb-10">
-          <div className="flex gap-2">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value.toUpperCase())}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Enter ticker symbol (e.g., RELIANCE)"
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-              />
-            </div>
-            <Button onClick={handleSearch} className="btn-premium">
-              Analyze
-            </Button>
-          </div>
+          <StockSearchInput
+            value={searchValue}
+            onChange={handleSearchChange}
+            onSelect={handleStockSelect}
+            placeholder="Search by ticker or company name (e.g., RELIANCE, TCS)"
+            autoNavigate={false}
+          />
         </div>
 
         {/* Loading State */}
@@ -100,7 +106,7 @@ export default function AnalyzePage() {
         {/* No Results */}
         {!isLoading && activeTicker && !stock && (
           <div className="text-center py-20 glass-card max-w-md mx-auto">
-            <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Stock Not Found</h3>
             <p className="text-muted-foreground">
               No data available for "{activeTicker}". Try another ticker.
@@ -121,10 +127,11 @@ export default function AnalyzePage() {
                       "px-3 py-1 rounded-full text-sm font-medium",
                       stock.ai_tag === 'Hot' && 'ai-tag-hot',
                       stock.ai_tag === 'Rising' && 'ai-tag-rising',
-                      !['Hot', 'Rising'].includes(stock.ai_tag) && 'ai-tag-neutral'
+                      !['Hot', 'Rising'].includes(stock.ai_tag || '') && 'ai-tag-neutral'
                     )}>
-                      {stock.ai_tag}
+                      {stock.ai_tag || 'Neutral'}
                     </span>
+                    <RealTimeIndicator lastUpdate={lastUpdate} />
                   </div>
                   <p className="text-muted-foreground">{stock.name}</p>
                 </div>

@@ -4,15 +4,23 @@ import { SearchBar } from '@/components/SearchBar';
 import { FilterTabs } from '@/components/FilterTabs';
 import { IndustryCard } from '@/components/IndustryCard';
 import { TrendingStocks } from '@/components/TrendingStocks';
+import { MarketInsightsBanner } from '@/components/MarketInsightsBanner';
+import { StockSearchInput } from '@/components/StockSearchInput';
 import { useIndustries } from '@/hooks/useIndustries';
+import { useRealtimeStocks } from '@/hooks/useRealtimeStocks';
 import type { FilterType } from '@/types/industry';
+
 import { Loader2, TrendingUp, Building2, Eye } from 'lucide-react';
 
 export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [stockSearch, setStockSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   const { data: industries, isLoading, error } = useIndustries(activeFilter, searchQuery);
+  
+  // Enable realtime updates
+  useRealtimeStocks();
 
   const stats = useMemo(() => {
     if (!industries) return { total: 0, trending: 0, totalViews: 0 };
@@ -28,14 +36,27 @@ export default function Index() {
       <Header />
 
       <main className="container py-8">
+        {/* Real-Time Market Insights */}
+        <MarketInsightsBanner />
+
         {/* Hero Section */}
         <div className="text-center mb-10 slide-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Discover Market Sectors</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
             AI-powered industry intelligence. Explore sectors, analyze trends, and make informed decisions.
           </p>
+          
+          {/* Stock Quick Search */}
+          <div className="max-w-md mx-auto">
+            <StockSearchInput
+              value={stockSearch}
+              onChange={setStockSearch}
+              placeholder="Quick search: Enter stock ticker or name..."
+              autoNavigate={true}
+            />
+          </div>
         </div>
 
         {/* Stats */}
