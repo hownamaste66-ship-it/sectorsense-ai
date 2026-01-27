@@ -4,9 +4,10 @@ interface SparklineChartProps {
   data: number[];
   color?: 'primary' | 'success' | 'destructive';
   className?: string;
+  height?: number;
 }
 
-export function SparklineChart({ data, color = 'primary', className }: SparklineChartProps) {
+export function SparklineChart({ data, color = 'primary', className, height }: SparklineChartProps) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
