@@ -5,3 +5,9 @@ enabled = true
 
 [functions.chat]
 verify_jwt = false
+
+[functions.fetch-stock-prices]
+verify_jwt = false
+
+[functions.update-fundamentals]
+verify_jwt = false

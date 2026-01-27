@@ -3,9 +3,10 @@ import { Header } from '@/components/Header';
 import { SearchBar } from '@/components/SearchBar';
 import { FilterTabs } from '@/components/FilterTabs';
 import { IndustryCard } from '@/components/IndustryCard';
-import { TrendingStocks } from '@/components/TrendingStocks';
+import { EnhancedTrendingStocks } from '@/components/EnhancedTrendingStocks';
 import { MarketInsightsBanner } from '@/components/MarketInsightsBanner';
 import { StockSearchInput } from '@/components/StockSearchInput';
+import { LiveDataBadge } from '@/components/LiveDataBadge';
 import { useIndustries } from '@/hooks/useIndustries';
 import { useRealtimeStocks } from '@/hooks/useRealtimeStocks';
 import type { FilterType } from '@/types/industry';
@@ -36,6 +37,11 @@ export default function Index() {
       <Header />
 
       <main className="container py-8">
+        {/* Live Data Status Bar */}
+        <div className="flex items-center justify-between mb-6">
+          <LiveDataBadge showDetails={true} />
+        </div>
+
         {/* Real-Time Market Insights */}
         <MarketInsightsBanner />
 
@@ -45,7 +51,7 @@ export default function Index() {
             <span className="gradient-text">Discover Market Sectors</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-            AI-powered industry intelligence. Explore sectors, analyze trends, and make informed decisions.
+            AI-powered industry intelligence with real-time NSE/BSE data. Explore sectors, analyze trends, and make informed decisions.
           </p>
           
           {/* Stock Quick Search */}
@@ -85,7 +91,7 @@ export default function Index() {
         </div>
 
         {/* Trending Stocks Section */}
-        <TrendingStocks />
+        <EnhancedTrendingStocks />
 
         {/* Search & Filters */}
         <div className="space-y-4 mb-8">
