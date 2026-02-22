@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Brain, LayoutGrid, MessageSquare, TrendingUp, BarChart3, Scan, Activity, Sparkles } from 'lucide-react';
+import { Brain, LayoutGrid, MessageSquare, TrendingUp, BarChart3, Scan, Activity, Sparkles, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Header() {
@@ -12,6 +12,7 @@ export function Header() {
     { href: '/scanner', label: 'Scanner', icon: Scan },
     { href: '/sentiment', label: 'Sentiment', icon: Activity },
     { href: '/themes', label: 'Themes', icon: Sparkles },
+    { href: '/pricing', label: 'Premium', icon: Crown },
   ];
 
   return (

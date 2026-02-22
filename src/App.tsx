@@ -11,6 +11,7 @@ import PredictPage from "./pages/PredictPage";
 import ScannerPage from "./pages/ScannerPage";
 import SentimentPage from "./pages/SentimentPage";
 import ThemesPage from "./pages/ThemesPage";
+import PricingPage from "./pages/PricingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/scanner" element={<ScannerPage />} />
           <Route path="/sentiment" element={<SentimentPage />} />
           <Route path="/themes" element={<ThemesPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
